@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace River.Framework.Validation {
+namespace River.Framework {
     public static class Guards {
         public static void Validate(bool condition, string name) {
             if (!condition) {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using River.Framework.Validation;
 
 namespace River.Framework.Extensions {
     public static class ByteArrayExtensions {

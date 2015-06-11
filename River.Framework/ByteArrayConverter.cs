@@ -1,5 +1,4 @@
 ﻿using System;
-using River.Framework.Validation;
 
 namespace River.Framework {
     public static class ByteArrayConverter {

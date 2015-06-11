@@ -49,7 +49,7 @@
     <Compile Include="Net\HttpParameterCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringPadding.cs" />
-    <Compile Include="Validation\Guards.cs" />
+    <Compile Include="Guards.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
