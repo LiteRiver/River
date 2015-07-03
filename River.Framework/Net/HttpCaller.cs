@@ -180,6 +180,71 @@ namespace River.Framework.Net {
             }
         }
 
+        public string Post(string url, string body, int timeout = DefaultTimeout, Encoding paramsEncode = null, Encoding contentEncoding = null, Action<HttpWebRequest> updateRequest = null, CookieContainer cookie = null) {
+            Guards.ThrowIfIsNullOrWhiteSpace(url, "url");
+
+            timeout = timeout < 1 ? DefaultTimeout : timeout;
+            contentEncoding = contentEncoding ?? Encoding.UTF8;
+            updateRequest = updateRequest ?? (x => { });
+
+
+            HttpWebRequest req = null;
+            HttpWebResponse rep = null;
+            string postStr = null;
+            byte[] postData = null;
+            Stream reqStream = null;
+            Stream repStream = null;
+            StreamReader sReader = null;
+            string ret = null;
+
+            try {
+                req = (HttpWebRequest)HttpWebRequest.Create(url);
+                req.Timeout = timeout;
+                req.ReadWriteTimeout = timeout;
+                req.AllowAutoRedirect = true;
+                req.Method = "POST";
+                req.ContentType = "application/x-www-form-urlencoded";
+
+                updateRequest(req);
+
+                if (cookie != null) {
+                    req.CookieContainer = cookie;
+                }
+
+                postStr = body ?? string.Empty;
+                postData = contentEncoding.GetBytes(postStr);
+                req.ContentLength = postData.Length;
+
+                reqStream = req.GetRequestStream();
+                reqStream.Write(postData, 0, postData.Length);
+                reqStream.Flush();
+
+                rep = (HttpWebResponse)req.GetResponse();
+                repStream = rep.GetResponseStream();
+
+                Encoding repEnc = null;
+
+                if (string.IsNullOrEmpty(rep.CharacterSet)) {
+                    repEnc = contentEncoding;
+                } else {
+                    repEnc = Encoding.GetEncoding(rep.CharacterSet);
+                }
+
+                sReader = new StreamReader(repStream, repEnc);
+                ret = sReader.ReadToEnd();
+
+                return ret;
+            } finally {
+                if (null != rep) {
+                    rep.Close();
+                }
+
+                if (null != sReader) {
+                    sReader.Close();
+                }
+            }
+        }
+
         public byte[] PostRaw(string url, HttpParameterCollection parameters, int timeout = DefaultTimeout, Encoding paramsEncode = null, Encoding contentEncoding = null, Action<HttpWebRequest> updateRequest = null, CookieContainer cookie = null) {
             Guards.ThrowIfIsNullOrWhiteSpace(url, "url");
 

@@ -9,9 +9,9 @@ namespace River.Framework.Net {
 
         public HttpParameterCollection(bool sort = true) {
             if (sort) {
-                m_paramDict = new SortedDictionary<string, List<string>>();
+                m_paramDict = new SortedDictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
             } else {
-                m_paramDict = new Dictionary<string, List<string>>();
+                m_paramDict = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
             }
         }
 
